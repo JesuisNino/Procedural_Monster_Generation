@@ -117,6 +117,6 @@ class DEMO_API UBreedChildMonster : public UBlueprintFunctionLibrary
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "Breed Child Monster")
-	static TArray<USkeletalMesh*> GetChildMeshesArray(const TArray<USkeletalMesh*>& ParentMeshesArray, UDataTable* ChildDataTable);
+	static TArray<USkeletalMesh*> GetChildMeshesArray(const TArray<USkeletalMesh*>& ParentMeshesArray, UDataTable* TagDataTable);
 	
 };
