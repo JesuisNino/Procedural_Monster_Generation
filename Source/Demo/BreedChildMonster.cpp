@@ -3,19 +3,19 @@
 
 #include "BreedChildMonster.h"
 
-TArray<USkeletalMesh*> UBreedChildMonster::GetChildMeshesArray(const TArray<USkeletalMesh*>& ParentMeshesArray, UDataTable* TagDataTable)
+TArray<USkeletalMesh*>  UBreedChildMonster::GetChildMeshesArray(const TArray<USkeletalMesh*>& ParentMeshesArray, UDataTable* TagDataTable)
 {
 	TArray<USkeletalMesh*> ChildMeshesArray;
 
 	TMap<USkeletalMesh*, int32> ParentMeshWithRateMap;
 
-	TArray<FStruct_MasterTags*> TagDataArray;
-	TagDataTable->GetAllRows<FStruct_MasterTags>("", TagDataArray);
+	TArray<USkeletalMesh*> SkeletalMeshesArray;
 
-	for (int32 i = 0; i < ParentMeshesArray.Num(); i++)
-	{
-		//if (ParentMeshesArray[i] == TagDataArray)
-	}
+	// Iterate through each FStruct_MasterTags in the TagDataArray
+	//for (int32 i = 0; i < ParentMeshesArray.Num(); i++)
+	//{
+
+	//}
 
 	return ChildMeshesArray;
 }
