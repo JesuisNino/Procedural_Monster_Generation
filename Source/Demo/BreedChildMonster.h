@@ -27,18 +27,24 @@ class DEMO_API UBreedChildMonster : public UBlueprintFunctionLibrary
 public:
 	UFUNCTION(BlueprintCallable, Category = "Breed Child Monster")
 	static TArray<FChildrenMap> CrossoverBreed(
-		const TMap<USkeletalMesh*, int32>& RatedMeshMap,
-		const TMap<USkeletalMesh*, FName>& LocatedMeshMap,
+		const TMap<USkeletalMesh*, int32>& RatedParentMeshMap,
+		const TMap<USkeletalMesh*, FName>& LocatedParentMeshMap,
 		const int32 ChildrenNum
 	);
 
 	UFUNCTION(BlueprintCallable, Category = "Breed Child Monster")
-	static TArray<FChildrenMap>  MutationBreed(
+	static TArray<FChildrenMap> MutationBreed(
 		const TArray<FChildrenMap>& CrossoveredChildren,
-		const TArray<FChildrenMap>& AvailableLocatedMeshes,
-		const TMap<FName, EImportanceName>& BodyPieceImportanceMap
+		const TMap<USkeletalMesh*, int32>& RatedParentMeshMap,
+		const TMap<USkeletalMesh*, FName>& LocatedParentMeshMap,
+		const TMap<USkeletalMesh*, int32>& RatedAllMeshMap,
+		const TMap<USkeletalMesh*, FName>& LocatedAllMeshMap,
+		const TMap<FName, EImportanceName>& BodyPieceImportanceMap,
+		const float Coefficient
 	);
 
 protected:
-
+	static TMap<FName, TArray<USkeletalMesh*>> IntegrateMeshLocation(
+		const TMap<USkeletalMesh*, FName>& LocatedMeshMap
+	);
 };
