@@ -28,9 +28,3 @@ struct FStruct_BodyPieceImportances : public FTableRowBase
         EImportanceNames ImportanceName;
 };
 
-UCLASS()
-class DEMO_API UStruct_BodyPieceImportance : public UUserDefinedStruct
-{
-	GENERATED_BODY()
-	
-};
