@@ -10,6 +10,15 @@
 /**
  * 
  */
+USTRUCT(BlueprintType)
+struct FChildrenMap
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<FName, USkeletalMesh*> MeshMap;
+};
+
 UCLASS()
 class DEMO_API UBreedChildMonster : public UBlueprintFunctionLibrary
 {
@@ -17,9 +26,19 @@ class DEMO_API UBreedChildMonster : public UBlueprintFunctionLibrary
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "Breed Child Monster")
-	static TMap<FName, USkeletalMesh*> GetChildMeshesArray(
+	static TArray<FChildrenMap> CrossoverBreed(
 		const TMap<USkeletalMesh*, int32>& RatedMeshMap,
-		const TMap<FName, USkeletalMesh*>& LocatedMeshMap,
+		const TMap<USkeletalMesh*, FName>& LocatedMeshMap,
+		const int32 ChildrenNum
+	);
+
+	UFUNCTION(BlueprintCallable, Category = "Breed Child Monster")
+	static TArray<FChildrenMap>  MutationBreed(
+		const TArray<FChildrenMap>& CrossoveredChildren,
+		const TArray<FChildrenMap>& AvailableLocatedMeshes,
 		const TMap<FName, EImportanceName>& BodyPieceImportanceMap
 	);
+
+protected:
+
 };
