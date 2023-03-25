@@ -3,9 +3,13 @@
 
 #include "BreedChildMonster.h"
 
-TArray<USkeletalMesh*>  UBreedChildMonster::GetChildMeshesArray(const TArray<USkeletalMesh*>& ParentMeshesArray, UDataTable* TagDataTable)
+TMap<FName, USkeletalMesh*>  UBreedChildMonster::GetChildMeshesArray(
+	const TMap<USkeletalMesh*, int32>& RatedMeshMap,
+	const TMap<FName, USkeletalMesh*>& LocatedMeshMap,
+	const TMap<FName, EImportanceName>& BodyPieceImportanceMap
+)
 {
-	TArray<USkeletalMesh*> ChildMeshesArray;
+	TMap<FName, USkeletalMesh*> ChildMeshMap;
 
 	TMap<USkeletalMesh*, int32> ParentMeshWithRateMap;
 
@@ -17,5 +21,5 @@ TArray<USkeletalMesh*>  UBreedChildMonster::GetChildMeshesArray(const TArray<USk
 
 	//}
 
-	return ChildMeshesArray;
+	return ChildMeshMap;
 }

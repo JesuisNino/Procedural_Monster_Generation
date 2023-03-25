@@ -12,7 +12,7 @@
  */
 
 UENUM(BlueprintType)
-enum class EImportanceNames : uint8
+enum class EImportanceName : uint8
 {
     MUST,
     POSSIBLE,
@@ -20,11 +20,11 @@ enum class EImportanceNames : uint8
 };
 
 USTRUCT(BlueprintType)
-struct FStruct_BodyPieceImportances : public FTableRowBase
+struct FStruct_BodyPieceImportance : public FTableRowBase
 {
     GENERATED_BODY()
 
         UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BodyPieceImportance", meta = (ExposeOnSpawn))
-        EImportanceNames ImportanceName;
+        EImportanceName ImportanceName;
 };
 

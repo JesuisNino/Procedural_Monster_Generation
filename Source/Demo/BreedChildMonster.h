@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Engine/DataTable.h"
+#include "Struct_BodyPieceImportance.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "BreedChildMonster.generated.h"
 
@@ -17,6 +17,9 @@ class DEMO_API UBreedChildMonster : public UBlueprintFunctionLibrary
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "Breed Child Monster")
-	static TArray<USkeletalMesh*> GetChildMeshesArray(const TArray<USkeletalMesh*>& ParentMeshesArray, UDataTable* TagDataTable);
-	
+	static TMap<FName, USkeletalMesh*> GetChildMeshesArray(
+		const TMap<USkeletalMesh*, int32>& RatedMeshMap,
+		const TMap<FName, USkeletalMesh*>& LocatedMeshMap,
+		const TMap<FName, EImportanceName>& BodyPieceImportanceMap
+	);
 };
