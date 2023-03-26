@@ -35,7 +35,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Breed Child Monster")
 	static TArray<FChildrenMap> MutationBreed(
 		const TArray<FChildrenMap>& CrossoveredChildren,
-		const TMap<USkeletalMesh*, int32>& RatedParentMeshMap,
 		const TMap<USkeletalMesh*, FName>& LocatedParentMeshMap,
 		const TMap<USkeletalMesh*, int32>& RatedAllMeshMap,
 		const TMap<USkeletalMesh*, FName>& LocatedAllMeshMap,

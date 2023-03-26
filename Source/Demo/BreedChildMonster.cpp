@@ -67,7 +67,6 @@ TArray<FChildrenMap>  UBreedChildMonster::CrossoverBreed(
 
 TArray<FChildrenMap> UBreedChildMonster::MutationBreed(
     const TArray<FChildrenMap>& CrossoveredChildren,
-    const TMap<USkeletalMesh*, int32>& RatedParentMeshMap,
     const TMap<USkeletalMesh*, FName>& LocatedParentMeshMap,
     const TMap<USkeletalMesh*, int32>& RatedAllMeshMap,
     const TMap<USkeletalMesh*, FName>& LocatedAllMeshMap,
@@ -79,18 +78,18 @@ TArray<FChildrenMap> UBreedChildMonster::MutationBreed(
 
     TMap<FName, TArray<USkeletalMesh*>> IntegratedLocatedParentMeshes = IntegrateMeshLocation(LocatedParentMeshMap);
     TMap<FName, TArray<USkeletalMesh*>> IntegratedLocatedAllMeshes = IntegrateMeshLocation(LocatedAllMeshMap);
-    TMap<USkeletalMesh*, int32> RatedMutationMeshMap;
+    TMap<USkeletalMesh*, float> RatedMutationMeshMap;
 
     for (const auto& Child : CrossoveredChildren) 
     {
         FChildrenMap ChildMap;
-        TMap<FName, int32> TotalRateForLocation;
+        TMap<FName, float> TotalRateForLocation;
 
         for (const auto& Location : LocatedAllMeshMap)
         {
             FName LocationName = Location.Value;
 
-            int32 MeshRate = RatedAllMeshMap.FindRef(Location.Key);
+            float MeshRate = RatedAllMeshMap.FindRef(Location.Key);
 
             if (Coefficient >= 1) {
                 TotalRateForLocation.FindOrAdd(LocationName) += MeshRate;
@@ -98,13 +97,13 @@ TArray<FChildrenMap> UBreedChildMonster::MutationBreed(
             }
             else if (IntegratedLocatedParentMeshes.FindRef(LocationName).Contains(Location.Key))
             {
-                TotalRateForLocation.FindOrAdd(LocationName) += MeshRate * (int32)((1 - Coefficient) * 100);
-                RatedMutationMeshMap.FindOrAdd(Location.Key) = (int32)((1 - Coefficient) * 100);
+                TotalRateForLocation.FindOrAdd(LocationName) += MeshRate * (1 - Coefficient);
+                RatedMutationMeshMap.FindOrAdd(Location.Key) = 1 - Coefficient;
             }
             else
             {
-                TotalRateForLocation.FindOrAdd(LocationName) += MeshRate * (int32)(Coefficient * 100);
-                RatedMutationMeshMap.FindOrAdd(Location.Key) = (int32)(Coefficient * 100);
+                TotalRateForLocation.FindOrAdd(LocationName) += MeshRate * Coefficient / (IntegratedLocatedAllMeshes.FindRef(LocationName).Num() - 2);
+                RatedMutationMeshMap.FindOrAdd(Location.Key) = Coefficient / (IntegratedLocatedAllMeshes.FindRef(LocationName).Num() - 2);
             }
         
         }
@@ -114,22 +113,30 @@ TArray<FChildrenMap> UBreedChildMonster::MutationBreed(
 
             FName LocationName = ChildBodyPiece.Key;
 
-            // Generate a random number between 1 and TotalRate (inclusive)
-            int32 RandomRate = FMath::RandRange(1, TotalRateForLocation.FindRef(LocationName));
-            int32 CurrentRate = 0;
+            // Generate a random number between 0 and TotalRate (inclusive)
+            float RandomRate = FMath::RandRange(0.0f, TotalRateForLocation.FindRef(LocationName));
+            float CurrentRate = 0;
             USkeletalMesh* SelectedMesh = nullptr;
 
+            TArray<USkeletalMesh*> TempArray = IntegratedLocatedAllMeshes.FindRef(LocationName);
+           
+            TempArray.Sort([&RatedMutationMeshMap](const USkeletalMesh& MeshA, const USkeletalMesh& MeshB) {
+                float AValue = RatedMutationMeshMap.FindRef(&MeshA);
+                float BValue = RatedMutationMeshMap.FindRef(&MeshB);
+                return AValue > BValue;
+                });
+
             // Roulette Wheel Selection Implementation
-            for (const auto& RatedMesh : RatedMutationMeshMap)
+            for (const auto& AvailableMesh : TempArray)
             {
 
-                CurrentRate += RatedMesh.Value;
+                CurrentRate += RatedMutationMeshMap.FindRef(AvailableMesh);
                 if (RandomRate <= CurrentRate)
                 {
-                    SelectedMesh = RatedMesh.Key;
+                    SelectedMesh = AvailableMesh;
                     break;
                 }
-
+                
             }
 
             // Add the selected mesh to the child map
@@ -140,6 +147,8 @@ TArray<FChildrenMap> UBreedChildMonster::MutationBreed(
         // Add the child map to the ChildrenArray
         ChildrenArray.Add(ChildMap);
     }
+
+    
 
 	return ChildrenArray;
 }
