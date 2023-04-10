@@ -164,3 +164,29 @@ TMap<FName, TArray<USkeletalMesh*>> UBreedChildMonster::IntegrateMeshLocation(co
 
     return IntegratedLocatedMeshes;
 }
+
+FVector UBreedChildMonster::MorphBreed(
+    const FVector& ParentA,
+    const FVector& ParentB,
+    const float Coefficient
+) {
+    // Calculate the range for ParentA and ParentB
+    FVector MinParentA = ParentA * (1.0f - Coefficient);
+    FVector MaxParentA = ParentA * (1.0f + Coefficient);
+    FVector MinParentB = ParentB * (1.0f - Coefficient);
+    FVector MaxParentB = ParentB * (1.0f + Coefficient);
+
+    // Randomly generate child vector components within the range of ParentA and ParentB
+    FVector ChildVectorA, ChildVectorB;
+    ChildVectorA.X = FMath::FRandRange(MinParentA.X, MaxParentA.X);
+    ChildVectorA.Y = FMath::FRandRange(MinParentA.Y, MaxParentA.Y);
+    ChildVectorA.Z = FMath::FRandRange(MinParentA.Z, MaxParentA.Z);
+    ChildVectorB.X = FMath::FRandRange(MinParentB.X, MaxParentB.X);
+    ChildVectorB.Y = FMath::FRandRange(MinParentB.Y, MaxParentB.Y);
+    ChildVectorB.Z = FMath::FRandRange(MinParentB.Z, MaxParentB.Z);
+
+    // Randomly choose one of the generated child vectors
+    FVector ChildVector = FMath::FRand() < 0.5f ? ChildVectorA : ChildVectorB;
+
+    return ChildVector;
+}

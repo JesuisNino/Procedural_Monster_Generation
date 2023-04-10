@@ -42,6 +42,13 @@ public:
 		const float Coefficient
 	);
 
+	UFUNCTION(BlueprintCallable, Category = "Breed Child Monster")
+	static FVector MorphBreed(
+		const FVector& ParentA, 
+		const FVector& ParentB,
+		const float Coefficient
+	);
+
 protected:
 	static TMap<FName, TArray<USkeletalMesh*>> IntegrateMeshLocation(
 		const TMap<USkeletalMesh*, FName>& LocatedMeshMap
