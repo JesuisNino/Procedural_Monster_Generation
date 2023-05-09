@@ -39,7 +39,6 @@ TArray<FChildrenMap>  UBreedChildMonster::CrossoverBreed(
 
             for (const auto& RatedMesh : RatedParentMeshMap)
             {
-
                 int32 CurrentRate = RatedMesh.Value;
                 if (RandomRate <= CurrentRate)
                 {
@@ -50,7 +49,6 @@ TArray<FChildrenMap>  UBreedChildMonster::CrossoverBreed(
                 {
                     SelectedMesh = IntegratedLocatedParentMeshes.FindRef(LocationName).Last();
                 }
-
             }
 
             // Add the selected mesh to the child map
@@ -97,8 +95,8 @@ TArray<FChildrenMap> UBreedChildMonster::MutationBreed(
             }
             else if (IntegratedLocatedParentMeshes.FindRef(LocationName).Contains(Location.Key))
             {
-                TotalRateForLocation.FindOrAdd(LocationName) += MeshRate * (1 - Coefficient);
-                RatedMutationMeshMap.FindOrAdd(Location.Key) = 1 - Coefficient;
+                TotalRateForLocation.FindOrAdd(LocationName) += MeshRate * (1 - Coefficient) / 2;
+                RatedMutationMeshMap.FindOrAdd(Location.Key) = (1 - Coefficient) / 2;
             }
             else
             {
@@ -129,14 +127,12 @@ TArray<FChildrenMap> UBreedChildMonster::MutationBreed(
             // Roulette Wheel Selection Implementation
             for (const auto& AvailableMesh : TempArray)
             {
-
                 CurrentRate += RatedMutationMeshMap.FindRef(AvailableMesh);
                 if (RandomRate <= CurrentRate)
                 {
                     SelectedMesh = AvailableMesh;
                     break;
                 }
-                
             }
 
             // Add the selected mesh to the child map
